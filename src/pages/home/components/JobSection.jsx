@@ -1,13 +1,6 @@
 import JobCard from "@/components/shared/JobCard";
+import { getJobs } from "@/lib/services/api/jobs";
 import { useEffect, useState } from "react";
-
-const getJobs = async () => {
-  const res = await fetch("http://localhost:8000/jobs", {
-    method: "GET",
-  });
-  const jobs = await res.json();
-  return jobs;
-};
 
 function JobSection() {
   const [jobs, setJobs] = useState([]);
@@ -20,7 +13,7 @@ function JobSection() {
       .then((data) => {
         setJobs(data);
       })
-      .catch((err) => {
+      .catch(() => {
         setIsJobsError(true);
       })
       .finally(() => {

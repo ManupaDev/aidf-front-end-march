@@ -10,7 +10,7 @@ import { Briefcase, MapPin } from "lucide-react";
 
 function JobCard(props) {
   return (
-    <Link to={`/job/${props._id}`} className="block">
+    <Link  to={props.isAdmin ? `/admin/job/${props._id}` : `/job/${props._id}`} className="block">
       <Card>
         <CardHeader>
           <CardTitle>{props.title}</CardTitle>
