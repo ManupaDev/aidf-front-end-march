@@ -3,23 +3,32 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import { useUser } from "@clerk/clerk-react";
 import { Briefcase, MapPin } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 
 const getJob = async (id) => {
+  const token = await window.Clerk.session.getToken();
+
   const res = await fetch(`http://localhost:8000/jobs/${id}`, {
     method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   });
   const job = await res.json();
   return job;
 };
 
 const createJob = async (jobApplication) => {
+  const token = await window.Clerk.session.getToken();
+
   await fetch(`http://localhost:8000/jobApplications`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(jobApplication),
   });
@@ -28,6 +37,8 @@ const createJob = async (jobApplication) => {
 function JobPage() {
   const [job, setJob] = useState(null);
   const params = useParams();
+
+  const { isLoaded, isSignedIn, user } = useUser();
 
   useEffect(() => {
     getJob(params.id)
@@ -53,9 +64,17 @@ function JobPage() {
       fullName: formData.fullName,
       answers: [formData.a1, formData.a2, formData.a3],
       job: params.id,
-      userId: "123",
+      userId: user.id,
     });
   };
+
+  if (!isLoaded) {
+    return <div>Loading...</div>;
+  }
+
+  if (!isSignedIn) {
+    return <Navigate to="/sign-in" />;
+  }
 
   return (
     <div>

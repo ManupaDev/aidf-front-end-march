@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
 
 function Navigation() {
   return (
@@ -11,12 +12,17 @@ function Navigation() {
       </div>
       <div className="flex justify-center gap-x-8 items-center">
         <Link to={"/"}>Home</Link>
-        <div className="flex gap-x-4 items-center">
-          <Link to={"/sign-in"}>Sign In</Link>
-          <Button asChild>
-            <Link to={"/sign-up"}>Sign Up</Link>
-          </Button>
-        </div>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
+        <SignedOut>
+          <div className="flex gap-x-4 items-center">
+            <Link to={"/sign-in"}>Sign In</Link>
+            <Button asChild>
+              <Link to={"/sign-up"}>Sign Up</Link>
+            </Button>
+          </div>
+        </SignedOut>
       </div>
     </nav>
   );

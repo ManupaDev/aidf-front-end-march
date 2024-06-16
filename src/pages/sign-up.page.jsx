@@ -1,5 +1,11 @@
-function SignUpPage() {
-  return <div>Sign Up Page</div>;
+import { SignUp } from "@clerk/clerk-react";
+
+function SignInPage() {
+  return (
+    <div className="flex min-h-screen justify-center items-center">
+      <SignUp />
+    </div>
+  );
 }
 
-export default SignUpPage;
+export default SignInPage;
